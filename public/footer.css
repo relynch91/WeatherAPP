@@ -1,0 +1,9 @@
+.footer {
+    height: 20vh;
+    min-height: 100px;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 3px;
+    color: aqua;
+    background-color: black;
+}
