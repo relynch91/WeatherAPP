@@ -20,4 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(error);
     });
     
+    // window.add
+    let long, lat;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            long = position.coords.longitude;
+            lat = position.coords.latitude;
+            console.log(long);
+            console.log(lat);
+        })
+    }
 })
+
+document.addEventListener("submit", myFunction);
+
+function myFunction (e) {
+    e.preventDefault();
+    console.log(e);
+    console.log('yes');
+}
