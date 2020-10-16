@@ -1,41 +1,18 @@
 const axios = require('axios');
-
 document.addEventListener('DOMContentLoaded', () => {
-
-    // let isbn = '0201558025';
-    // axios.get(`/books/${isbn}`)
-    // .then((response) => {
-    //     console.log(response); 
-    // })
-    // .catch(function (error) {
-    //     console.log(error);
-    // });
-
-    // let query = "grace hopper";
-    // axios.get(`/search?string=${query}`)
-    // .then((response) => {
-    //     console.log(response);
-    // })
-    // .catch(function (error) {
-    //     console.log(error);
-    // });
     
-    // window.add
-    // let long, lat;
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(position => {
-    //         long = position.coords.longitude;
-    //         lat = position.coords.latitude;
-    //         console.log(long);
-    //         console.log(lat);
-    //     })
-    // }
+    let search = document.forms[0];
+    console.log(search)
+    
+    search.addEventListener("submit", function(e){
+        e.preventDefault();
+        let address = search.querySelector('input[type="text"]').value;
+        console.log(address);
+        formSubmit(address);
+    } )
+
+    function formSubmit (address) {
+        console.log(address)
+    }
+    
 })
-
-document.addEventListener("submit", myFunction);
-
-function myFunction (e) {
-    e.preventDefault();
-    console.log(e);
-    console.log('yes');
-}
