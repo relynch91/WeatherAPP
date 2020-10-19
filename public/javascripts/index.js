@@ -1,18 +1,14 @@
+import { formatAddress, getWeather } from './google-api.js';
 const axios = require('axios');
+
 document.addEventListener('DOMContentLoaded', () => {
-    
     let search = document.forms[0];
-    console.log(search)
-    
-    search.addEventListener("submit", function(e){
+    search.addEventListener("submit", async function(e){
         e.preventDefault();
         let address = search.querySelector('input[type="text"]').value;
-        console.log(address);
-        formSubmit(address);
-    } )
-
-    function formSubmit (address) {
         console.log(address)
-    }
-    
-})
+        let addressFormatted = formatAddress(address);
+        let weather = await getWeather(addressFormatted);
+        console.log(weather.data.properties.periods);
+    }) 
+});

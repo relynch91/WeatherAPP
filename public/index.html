@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='all'>
+<html class='main'>
   <head>
     <title>Ryans Javascript Project</title>
     <link rel="shortcut icon" href="./tabicon.ico">
@@ -18,11 +18,15 @@
     </header>
     <section class="main-body">
       <div class="search-form">
+        <h1>
+          Please Enter an Address or Location (city, state):
+        </h1>
+        <h3>
+          At this time WeatherReq only supports U.S. addresses. Check back later
+          for an update!
+        </h3>
         <form id="form">
-          <label>Enter an Address:
-          </label>
-          <br>
-          <input type="text" id="address" placeholder="e.g. 11 Lois Lane, Tiburon, CA">
+          <input type="text" id="address" placeholder="e.g. San Francisco, CA, USA">
           <button type="submit">Search</button>
         </form>
       </div>
