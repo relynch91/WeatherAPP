@@ -16,27 +16,25 @@ document.addEventListener('DOMContentLoaded', () => {
             let header1 = weatherData[i].name;
             let shortForecast = weatherData[i].shortForecast;
             let temp = weatherData[i].temperature;
-            let temperatureTrend = weatherData[i].temperatureTrend;
             let temperatureUnit = weatherData[i].temperatureUnit;
-            // let { header1, shortForecast, temp, temperatureTrend } = weatherData[i]
+            let windDirection = weatherData[i].windDirection;
+            let windSpeed = weatherData[i].windSpeed;
+            let icon = weatherData[i].icon
+            console.log(icon);
             let newItem = document.createElement("div");
             newItem.id = "weather-data";
             newItem.innerHTML = `<h1 class="weather-input">
                                     ${header1}
-                                    <h2>
-                                        ${shortForecast}
-                                            <ul>
-                                                <li>
-                                                    Temp <span>${temp} ${temperatureUnit}</span>
-                                                </li>
-                                            </ul>
-                                    </h2>
+                                    <h2>${shortForecast}</h2>
+                                    <img src=${icon}</img>
+                                    <h3>Temp ${temp} ${temperatureUnit}</h3>
+                                    <h3>Wind Direction: ${windDirection}</h3>
+                                    <h3>Wind Speed: ${windSpeed}</h3>
+                                    
                                 </h1>`;
-            // newItem.className = "weather-inputs"
             let list = document.getElementById('weather-info');
             
             list.append(newItem);
-            // document.writeln("<p>enter password:</p>");
         }
     });
 });
