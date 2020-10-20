@@ -13,13 +13,6 @@
     justify-content: center;
 }
 
-.search-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .header {
     height: 07vh;
     width: 100%;

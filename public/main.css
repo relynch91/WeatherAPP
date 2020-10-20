@@ -1,28 +1,25 @@
 .main-body {
-    color: red;
     width: 100%;
     height: 80vh;
-    /* border: 1px solid black;
-    border-radius: 3px; */
-    /* background-color: cornsilk; */
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: flex-start;
-    overflow-y: scroll;
 }
 
 .main {
     background-image: url("./windfarm.jpg");
 }
 
-.search-form {
+.search-form-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border: 1px solid black;
-    border-radius: 3px;
     background-color: whitesmoke;     
 }
 
-.search-form-header {
+.search-form-h1 {
     margin: 5px 10px 05px 10px;
 }
 
@@ -37,5 +34,25 @@
 .weather-inputs {
     border: 1px black solid;
     border-radius: 3px;
+}
 
+#weather-info {
+    display: flex;
+    overflow-x: scroll;
+}
+
+#weather-info {
+    display: flex;
+    /* margin: 0px 0px 0px 0px; */
+}
+
+#weather-data {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 10px 10px 10px;
+    min-width: 200px;
+    border: 1px black solid;
 }
