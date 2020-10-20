@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(address)
         let addressFormatted = formatAddress(address);
         let weather = await getWeather(addressFormatted);
-        console.log(weather.data.properties.periods);
-    }) 
+        let weatherData = weather.data.properties.periods
+        console.log(weatherData);
+    });
+
+
 });
