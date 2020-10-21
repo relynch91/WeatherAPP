@@ -4,6 +4,7 @@
     align-items: center;
     background-color: rgb(121, 202, 240);
 }
+
 .body {
     height: 98vh;
     width: 850px;
@@ -11,6 +12,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0;
 }
 
 .header {
@@ -24,7 +26,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 65px;
+    min-height: 54px;
     margin: 5px 10px 05px 10px;
 }
 

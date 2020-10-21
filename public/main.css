@@ -24,17 +24,13 @@
     margin: 5px 10px 05px 10px;
 }
 
+
 .search-form-info {
-    margin: 10px 10px 10px 10px;
+    margin: 0;
 }
 
 #form {
-    margin: 10px 10px 10px 10px;
-}
-
-.weather-inputs {
-    border: 1px black solid;
-    border-radius: 3px;
+    margin: 05px 10px 5px 10px;
 }
 
 #weather-info {
@@ -44,17 +40,37 @@
 
 #weather-info {
     display: flex;
-    /* margin: 0px 0px 0px 0px; */
+    flex-direction: column;
 }
 
 #weather-data {
     background-color: whitesmoke;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    margin: 10px 10px 10px 10px;
-    min-width: 250px;
+    margin: 02px 05px 02px 05px;
     border: 1px black solid;
-    border-radius: 3px;
+    border-radius: 8px;
+    height: 6%;
+    min-height: 28px;
+}
+
+.weather-input {
+    margin: 0px 0px 0px 5px;
+    width: 21%;
+}
+
+.weather-input-temp {
+    min-width: 100px;
+    width: 16%;
+}
+
+.weather-input-h3 {
+    margin: 0px 0px 0px 0px;
+    min-width: 100px;
+}
+
+.weather-input-windDir {
+    margin: 0px 0px 0px 0px;
+    min-width: 200px;
 }
