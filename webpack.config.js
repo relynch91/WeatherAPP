@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-
 const config = {
   entry: path.join(__dirname, './public/javascripts/index.js'),
   output: {
@@ -10,7 +9,6 @@ const config = {
   plugins: [
     new webpack.ProgressPlugin()
   ],
-  devtool: 'source-map'
+  devtool: 'source-map',
 }
-
 module.exports = config
