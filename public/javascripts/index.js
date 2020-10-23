@@ -1,10 +1,18 @@
-import { forceCenter } from 'd3';
 import { formatAddress, getWeather } from './google-api.js';
 const d3 = require('d3');
+import { forceCenter } from 'd3';
 
 document.addEventListener('DOMContentLoaded', () => {
-    let search = document.forms[0];
+    const graphDataPoints = []; 
+    // let search = document.forms[0];
+    // let button0 = document.forms[0];
+    // let button1 = document.forms[1];
+    // let button2 = document.forms[2];
+    // let button3 = document.forms[3];
+    // let button4 = document.forms[4];
+    // let button5 = document.forms[5];
 
+    
     search.addEventListener("submit", async function(e){
         e.preventDefault();
         let address = search.querySelector('input[type="text"]').value;
@@ -29,6 +37,28 @@ document.addEventListener('DOMContentLoaded', () => {
             let list = document.getElementById('weather-info');
             list.append(newItem);
         }
+
+        let graph = document.getElementById("weather-buttons");
+        graph.innerHTML = `
+            <form>
+                <button value="0" onClick=update(data, 0) >Dew Point</button> 
+            </form>
+            <form>
+                <button value="1" onClick=update(data, 1) >Relative Humidity</button>
+            </form>
+            <form>
+                <button value="2" onClick=update(data, 2) >Sky Cover</button>
+            </form>
+            <form>
+                <button value="3" onClick=update(data, 3) >Temperature</button>
+            </form>
+            <form>
+                <button value="4" onClick=update(data, 4) >Wind Speed</button>
+            </form>
+            <form>
+                <button value="5" onClick=update(data, 5) >Wind Direction</button>
+            </form>`
+
         formatGraphData(weatherRes['long']);
     });
 
@@ -41,21 +71,69 @@ document.addEventListener('DOMContentLoaded', () => {
         let windDirection = data.data.properties.windDirection.values;
         let theGoods = [dewPoint, relativeHumidity, skyCover, temperature, 
                         windSpeed, windDirection]
-        let graphDatapoints = [];
-
+        // let graphDatapoints = [];
         for (let k = 0; k < theGoods.length; k++) {
+            if (k === 3) {
+                let answer = buildDataTemp(theGoods[k]);
+                graphDataPoints.push(answer);
+            }
             let answer = buildData(theGoods[k]);
-            graphDatapoints.push(answer);
+            graphDataPoints.push(answer);
         }
-        buildGraph(graphDatapoints);
+        console.log(graphDataPoints)
+        update(graphDataPoints, 4)
         return true;
+    }
+
+    let buildDataTemp = (data) => {
+        let answer = [];
+        for (let i = 0; i < data.length; i++) {
+            let timeData = data[i]['validTime'];
+            let timeValue = ((timeData.split("/")[0]).split("+")[0]);
+            let dataValue = (data[i]['value']) * (9.00/5) + 32.00;
+            let forecastDuration = parseInt((timeData.split("/")[1]).split("")[2]);
+            if (forecastDuration !== 1) {
+                let string = timeValue.split("-");
+                let month = parseInt(string[1]);
+                let year = parseInt(string[0])
+                let day = parseInt(string[2].split("T")[0]);
+                let hour = parseInt(string[2].split("T")[1]);
+                for (let j = 0; j < forecastDuration; j++) {
+                    if (j === 0) {
+                        answer.push({ time: timeValue, value: dataValue })
+                    } else {
+                        if (hour < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + + "0" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue })
+                        } else {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue })
+                        }
+                    }
+                    hour += 1;
+                    if (hour === 24) {
+                        hour = 0;
+                        day += 1;
+                    } else if (day === 32) {
+                        day = 1;
+                        month += 1;
+                    } else if (month === 13) {
+                        month = 1;
+                        year += 1;
+                    }
+                }
+            } else {
+                answer.push({ time: timeValue, value: dataValue })
+            }
+        }
+        return (answer);
     }
 
     let buildData = (data) => {
         let answer = [];
         for (let i = 0; i < data.length; i++){
             let timeData = data[i]['validTime'];
-            let timeValue = ((timeData.split("/")[0]).split("+")[0]).split(":")[0];
+            let timeValue = ((timeData.split("/")[0]).split("+")[0]);
             let dataValue = data[i]['value'];
             let forecastDuration = parseInt((timeData.split("/")[1]).split("")[2]); 
             if (forecastDuration !== 1) {
@@ -64,26 +142,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 let year = parseInt(string[0])
                 let day = parseInt(string[2].split("T")[0]);
                 let hour = parseInt(string[2].split("T")[1]);
-         
-                for(let j = 0; j < forecastDuration; j ++) {
+                for (let j = 0; j < forecastDuration; j ++) {
                     if (j === 0) {
                         answer.push({ time: timeValue, value: dataValue })
                     } else {
-                        hour += 1;
-                        if (hour === 24) {
-                            hour = 0;
-                            day += 1;
-                        }
-                        if (day === 32) {
-                            day = 1;
-                            month += 1;
-                        }
-                        if (month === 13) {
-                            month = 1;
-                            year += 1;
-                        }
-                        let newTime = year.toString()+"-" + month.toString()+ "-" + day.toString() + "T" + hour.toString();
-                        answer.push({time: newTime, value: dataValue })
+                        if (hour < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + + "0" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue })
+                        } else {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + hour.toFixed()+ ":00:00";
+                            answer.push({ time: newTime, value: dataValue })
+                        }   
+                    }
+                    hour += 1;
+                    if (hour === 24) {
+                        hour = 0;
+                        day += 1;
+                    } else if (day === 32) {
+                        day = 1;
+                        month += 1;
+                    } else if (month === 13) {
+                        month = 1;
+                        year += 1;
                     }
                 }
             } else {
@@ -93,31 +173,64 @@ document.addEventListener('DOMContentLoaded', () => {
         return(answer);
     }
 
+    let update = (data, value=0) => {
+        console.log("I was clicked")
+        buildGraph(data[value]);
+    }
+
     let buildGraph = (data) => {
-        console.log(data);
-        let margin = { top: 0, right: 0, bottom: 0, left: 0 },
-            width = 800 - margin.left - margin.right,
-            height = 800 - margin.top - margin.bottom;
+        let dates = [];
+        let values = [];
+        let dataPackaged = data.map(function(d) {
+            let answer = {};
+            let key = new Date(d['time']);
+            dates.push(key);
+            let value = d['value'];
+            values.push(value);
+            answer['key'], answer['value'];
+            answer['key'] = key;
+            answer['value'] = value;
+            return answer
+            }
+        )
+
+        let margin = { top: 50, right: 50, bottom: 50, left: 50 }
+        let width = 850 - margin.left - margin.right;
+        let height = 600 - margin.top - margin.bottom;
+
+        let x = d3.scaleTime()
+            .domain(d3.extent(dates))
+            .range([0, width]);
+
+        let y = d3.scaleLinear()
+            .domain([d3.min(values), d3.max(values)])
+            .range([height, 0]);
+
+        let line = d3.line() 
+            .x(function (d) { return x(d.key) }) 
+            .y(function (d) { return y(d.value) }) 
+            .curve(d3.curveMonotoneX) 
 
         let svg = d3.select("#d3-graph")
             .append("svg")
+            .classed("svg-class", true)
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
-        // // Add X axis --> it is a date format
-        // let x = d3.scaleLinear()
-        //     .domain(d3.extent(data, function (d) { return d.year; }))
-        //     .range([0, width]);
-        // svg.append("g")
-        //     .attr("transform", "translate(0," + height + ")")
-        //     .call(d3.axisBottom(x).ticks(5));
-        // // Add Y axis
-        // let y = d3.scaleLinear()
-        //     .domain([0, d3.max(data, function (d) { return +d.n; })])
-        //     .range([height, 0]);
-        // svg.append("g")
-        //     .call(d3.axisLeft(y));
-    }
+
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y));
+
+        svg.append("path")
+            .datum(dataPackaged) 
+            .attr("class", "line") 
+            .attr("d", line);
+        }
 });
