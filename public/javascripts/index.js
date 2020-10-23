@@ -4,15 +4,15 @@ import { forceCenter } from 'd3';
 
 document.addEventListener('DOMContentLoaded', () => {
     const graphDataPoints = []; 
-    // let search = document.forms[0];
-    // let button0 = document.forms[0];
-    // let button1 = document.forms[1];
-    // let button2 = document.forms[2];
-    // let button3 = document.forms[3];
-    // let button4 = document.forms[4];
-    // let button5 = document.forms[5];
+    if (graphDataPoints.length > 0) {
+        let button0 = document.forms[1]
+        button0.addEventListener("submit", (e) => {
+            e.preventDefault();
+            console.log('here');
+        })
+    }
+    let search = document.forms[0];
 
-    
     search.addEventListener("submit", async function(e){
         e.preventDefault();
         let address = search.querySelector('input[type="text"]').value;
@@ -37,28 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let list = document.getElementById('weather-info');
             list.append(newItem);
         }
-
-        let graph = document.getElementById("weather-buttons");
-        graph.innerHTML = `
-            <form>
-                <button value="0" onClick=update(data, 0) >Dew Point</button> 
-            </form>
-            <form>
-                <button value="1" onClick=update(data, 1) >Relative Humidity</button>
-            </form>
-            <form>
-                <button value="2" onClick=update(data, 2) >Sky Cover</button>
-            </form>
-            <form>
-                <button value="3" onClick=update(data, 3) >Temperature</button>
-            </form>
-            <form>
-                <button value="4" onClick=update(data, 4) >Wind Speed</button>
-            </form>
-            <form>
-                <button value="5" onClick=update(data, 5) >Wind Direction</button>
-            </form>`
-
         formatGraphData(weatherRes['long']);
     });
 
@@ -174,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let update = (data, value=0) => {
+
         console.log("I was clicked")
         buildGraph(data[value]);
     }
