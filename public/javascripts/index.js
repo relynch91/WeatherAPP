@@ -3,14 +3,22 @@ const d3 = require('d3');
 import { forceCenter } from 'd3';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const graphDataPoints = []; 
-    if (graphDataPoints.length > 0) {
+    const graphDataPoints = [];
+    const updateGraphDataPoints = () => {
+        console.log('here')
+        console.log(document.forms);
+
+        if (graphDataPoints.length > 0) {
         let button0 = document.forms[1]
-        button0.addEventListener("submit", (e) => {
-            e.preventDefault();
+        console.log(button0);
+        button0.addEventListener("click", (e) => {
             console.log('here');
-        })
+            debugger
+            e.preventDefault();
+            })
+        }
     }
+
     let search = document.forms[0];
 
     search.addEventListener("submit", async function(e){
@@ -18,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let address = search.querySelector('input[type="text"]').value;
         let addressFormatted = formatAddress(address);
         let weatherRes = await getWeather(addressFormatted);
+        console.log(weatherRes)
         let weather1 = weatherRes.short.data.properties.periods;
 
         for (let i = 0; i < weather1.length; i += 2 ) {
@@ -53,13 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let k = 0; k < theGoods.length; k++) {
             if (k === 3) {
                 let answer = buildDataTemp(theGoods[k]);
+                console.log(answer);
                 graphDataPoints.push(answer);
             }
             let answer = buildData(theGoods[k]);
             graphDataPoints.push(answer);
         }
-        console.log(graphDataPoints)
-        update(graphDataPoints, 4)
+        
+        updateGraphDataPoints();
+        update(graphDataPoints, 4);
         return true;
     }
 
@@ -152,8 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let update = (data, value=0) => {
-
+        e.preventDefault();
         console.log("I was clicked")
+
         buildGraph(data[value]);
     }
 
