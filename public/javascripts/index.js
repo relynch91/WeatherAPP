@@ -4,21 +4,6 @@ import { forceCenter } from 'd3';
 
 document.addEventListener('DOMContentLoaded', () => {
     const graphDataPoints = [];
-    const updateGraphDataPoints = () => {
-        console.log('here')
-        console.log(document.forms);
-
-        if (graphDataPoints.length > 0) {
-        let button0 = document.forms[1]
-        console.log(button0);
-        button0.addEventListener("click", (e) => {
-            console.log('here');
-            debugger
-            e.preventDefault();
-            })
-        }
-    }
-
     let search = document.forms[0];
 
     search.addEventListener("submit", async function(e){
@@ -26,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let address = search.querySelector('input[type="text"]').value;
         let addressFormatted = formatAddress(address);
         let weatherRes = await getWeather(addressFormatted);
-        console.log(weatherRes)
         let weather1 = weatherRes.short.data.properties.periods;
 
         for (let i = 0; i < weather1.length; i += 2 ) {
@@ -45,6 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
                                 `;
             let list = document.getElementById('weather-info');
             list.append(newItem);
+        }
+        let buttons = document.getElementById('weather-buttons');
+        buttons.innerHTML = [0, 1, 2, 3, 4, 5].map((ele, i) => {
+            return (
+                `<button id="graph-button" type="button">${ele}</button>
+                `)
+            })
+        let buttonListener = document.getElementById("weather-buttons").querySelectorAll("#graph-button");
+        for(let a = 0; a < buttonListener.length; a ++) {
+            buttonListener[a].onclick = function (a) {
+                console.log('here');
+                update(a).bind(this);
+            }
         }
         formatGraphData(weatherRes['long']);
     });
@@ -68,8 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let answer = buildData(theGoods[k]);
             graphDataPoints.push(answer);
         }
-        
-        updateGraphDataPoints();
         update(graphDataPoints, 4);
         return true;
     }
@@ -136,10 +131,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         answer.push({ time: timeValue, value: dataValue })
                     } else {
                         if (hour < 10) {
-                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + + "0" + hour.toFixed() + ":00:00";
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + "0" + hour.toFixed() + ":00:00";
                             answer.push({ time: newTime, value: dataValue })
                         } else {
-                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + hour.toFixed()+ ":00:00";
+                            if (day < 10) {
+                                console.log(day);
+                                let newTime = year.toString() + "-" + month.toString() + "-" + day + "T" + hour.toFixed() + ":00:00";
+
+                            } else {
+                                day = day.toString()
+                            }
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day + "T" + hour.toFixed()+ ":00:00";
                             answer.push({ time: newTime, value: dataValue })
                         }   
                     }
@@ -162,14 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return(answer);
     }
 
-    let update = (data, value=0) => {
-        e.preventDefault();
-        console.log("I was clicked")
-
+    function update(data, value) {
         buildGraph(data[value]);
     }
 
     let buildGraph = (data) => {
+        console.log(data);
         let dates = [];
         let values = [];
         let dataPackaged = data.map(function(d) {
