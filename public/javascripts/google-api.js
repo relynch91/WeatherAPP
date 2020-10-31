@@ -15,9 +15,6 @@ export async function getWeather(formatted) {
     let govMetaData = await axios.get(`https://api.weather.gov/points/${lat},${long}`);
     let forecast = await axios.get(govMetaData.data.properties.forecast);
     let forecastProper = await axios.get(govMetaData.data.properties.forecastGridData)
-    console.log(forecast);
-    console.log(forecastProper);
-
     return {
         short: forecast,
         long: forecastProper

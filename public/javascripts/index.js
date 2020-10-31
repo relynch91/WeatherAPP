@@ -31,22 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
             list.append(newItem);
         }
         let buttons = document.getElementById('weather-buttons');
-        buttons.innerHTML = [0, 1, 2, 3, 4, 5].map((ele, i) => {
+        // buttons.innerHTML = ['Dewpoint', 'Relative Humidity', 'Skycover', 'Temperature', 'WindSpeed', 'WindDirection'].map((ele) => {
+        buttons.innerHTML = 'Dewpoint Relative Humidity Skycover Temperature WindSpeed WindDirection'.split(" ").map((ele) => {
+
             return (
-                `<button id="graph-button" type="button">${ele}</button>
+                `<button id="graph-button" type="button" value=${ele}>${ele}</button>
                 `)
             })
         let buttonListener = document.getElementById("weather-buttons").querySelectorAll("#graph-button");
         for(let a = 0; a < buttonListener.length; a ++) {
-            buttonListener[a].onclick = function (a) {
-                console.log('here');
-                update(a).bind(this);
+            buttonListener[a].onclick = function (e) {
+                e.preventDefault();
+                console.log(e.target.outerText);
+                d3.selectAll("#d3-graph > *").remove();
+                formatGraphData(weatherRes['long'], a);
             }
         }
         formatGraphData(weatherRes['long']);
     });
 
-    let formatGraphData = (data) => {
+    let formatGraphData = (data, value = 4) => {
         let dewPoint = data.data.properties.dewpoint.values;
         let relativeHumidity = data.data.properties.relativeHumidity.values;
         let skyCover = data.data.properties.skyCover.values;
@@ -55,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let windDirection = data.data.properties.windDirection.values;
         let theGoods = [dewPoint, relativeHumidity, skyCover, temperature, 
                         windSpeed, windDirection]
-        // let graphDatapoints = [];
         for (let k = 0; k < theGoods.length; k++) {
             if (k === 3) {
                 let answer = buildDataTemp(theGoods[k]);
@@ -65,8 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let answer = buildData(theGoods[k]);
             graphDataPoints.push(answer);
         }
-        update(graphDataPoints, 4);
-        return true;
+        update(graphDataPoints, value);
     }
 
     let buildDataTemp = (data) => {
@@ -135,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             answer.push({ time: newTime, value: dataValue })
                         } else {
                             if (day < 10) {
-                                console.log(day);
                                 let newTime = year.toString() + "-" + month.toString() + "-" + day + "T" + hour.toFixed() + ":00:00";
 
                             } else {
