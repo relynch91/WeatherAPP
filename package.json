@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "cors test",
   "main": "app.js",
-  "repository": "https://github.com/relynch91/climatefire2020.git",
+  "repository": "https://github.com/relynch91/straightFromNOAA",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -14,7 +14,8 @@
   "scripts": {
     "build": "webpack --watch",
     "start": "node app.js",
-    "start:debug": "DEBUG=* node app.js"
+    "start:debug": "DEBUG=* node app.js",
+    "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
     "axios": "^0.18.1",
