@@ -1,6 +1,6 @@
 import { formatAddress, getWeather } from './google-api.js';
 const d3 = require('d3');
-import { forceCenter } from 'd3';
+// import { forceCenter } from 'd3';
 
 document.addEventListener('DOMContentLoaded', () => {
     const graphDataPoints = [];
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         let buttons = document.getElementById('weather-buttons');
         // buttons.innerHTML = ['Dewpoint', 'Relative Humidity', 'Skycover', 'Temperature', 'WindSpeed', 'WindDirection'].map((ele) => {
-        buttons.innerHTML = 'Dewpoint Relative Humidity Skycover Temperature WindSpeed WindDirection'.split(" ").map((ele) => {
+        buttons.innerHTML = 'Dewpoint RelativeHumidity Skycover Temperature WindSpeed WindDirection'.split(" ").map((ele) => {
 
             return (
                 `<button id="graph-button" type="button" value=${ele}>${ele}</button>
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for(let a = 0; a < buttonListener.length; a ++) {
             buttonListener[a].onclick = function (e) {
                 e.preventDefault();
-                console.log(e.target.outerText);
                 d3.selectAll("#d3-graph > *").remove();
                 formatGraphData(weatherRes['long'], a);
             }
@@ -60,11 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let theGoods = [dewPoint, relativeHumidity, skyCover, temperature, 
                         windSpeed, windDirection]
         for (let k = 0; k < theGoods.length; k++) {
-            if (k === 3) {
-                let answer = buildDataTemp(theGoods[k]);
-                console.log(answer);
-                graphDataPoints.push(answer);
-            }
+            // if (k === 3) {
+            //     let answer = buildDataTemp(theGoods[k]);
+            //     graphDataPoints.push(answer);
+            // }
             let answer = buildData(theGoods[k]);
             graphDataPoints.push(answer);
         }
@@ -88,12 +86,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (j === 0) {
                         answer.push({ time: timeValue, value: dataValue })
                     } else {
-                        if (hour < 10) {
-                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + + "0" + hour.toFixed() + ":00:00";
+                        if (hour < 10 && day < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + "0" + day.toString() + "T" + "0" + hour.toFixed() + ":00:00";
                             answer.push({ time: newTime, value: dataValue })
-                        } else {
+                        } else if (hour < 10 && day > 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + "0" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue });
+                        } else if (hour > 10 && day < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + "0" + day.toString() + "T" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue });
+                        } else if (hour > 10 && day > 10) {
                             let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + hour.toFixed() + ":00:00";
-                            answer.push({ time: newTime, value: dataValue })
+                            answer.push({ time: newTime, value: dataValue });
                         }
                     }
                     hour += 1;
@@ -132,28 +136,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (j === 0) {
                         answer.push({ time: timeValue, value: dataValue })
                     } else {
-                        if (hour < 10) {
+                        if (hour < 10 && day < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + "0" + day.toString() + "T" + "0" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue })
+                        } else  if (hour < 10 && day > 10) {
                             let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + "0" + hour.toFixed() + ":00:00";
-                            answer.push({ time: newTime, value: dataValue })
-                        } else {
-                            if (day < 10) {
-                                let newTime = year.toString() + "-" + month.toString() + "-" + day + "T" + hour.toFixed() + ":00:00";
-
-                            } else {
-                                day = day.toString()
-                            }
-                            let newTime = year.toString() + "-" + month.toString() + "-" + day + "T" + hour.toFixed()+ ":00:00";
-                            answer.push({ time: newTime, value: dataValue })
-                        }   
+                            answer.push({ time: newTime, value: dataValue });
+                        } else if (hour > 10 && day < 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + "0" + day.toString() + "T" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue });
+                        } else if (hour > 10 && day > 10) {
+                            let newTime = year.toString() + "-" + month.toString() + "-" + day.toString() + "T" + hour.toFixed() + ":00:00";
+                            answer.push({ time: newTime, value: dataValue });
+                        }     
                     }
                     hour += 1;
                     if (hour === 24) {
                         hour = 0;
                         day += 1;
-                    } else if (day === 32) {
+                    } 
+                    if (day === 32) {
                         day = 1;
                         month += 1;
-                    } else if (month === 13) {
+                    } 
+                    if (month === 13) {
                         month = 1;
                         year += 1;
                     }
@@ -162,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 answer.push({time: timeValue, value: dataValue})
             }
         }
+        console.log(answer);
         return(answer);
     }
 
@@ -170,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let buildGraph = (data) => {
-        console.log(data);
         let dates = [];
         let values = [];
         let dataPackaged = data.map(function(d) {
