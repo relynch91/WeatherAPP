@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     search.addEventListener("submit", async function(e){
         e.preventDefault();
+        await removeData();
         let address = search.querySelector('input[type="text"]').value;
         let addressFormatted = formatAddress(address);
         let weatherRes = await getWeather(addressFormatted);
@@ -32,14 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
             list.append(newItem);
         }
         let buttons = document.getElementById('weather-buttons');
-        buttons.innerHTML = 'Dewpoint Humidity Skycover Temperature WindSpeed WindDirection'.split(" ").map((ele) => {
-            return (
-                `<button id="graph-button" type="button" value=${ele}>${ele}</button>
-                `)
-            })
+        buttons.innerHTML = "<button id='graph-button' type='button'>DewPoint</button>"
+        buttons.innerHTML += "<button id='graph-button' type='button'>Humidity</button>"
+        buttons.innerHTML += "<button id='graph-button' type='button'>Skycover</button>"
+        buttons.innerHTML += "<button id='graph-button' type='button'>Temperature</button>"
+        buttons.innerHTML += "<button id='graph-button' type='button'>Wind Speed</button>"
+        buttons.innerHTML += "<button id='graph-button' type='button'>Wind Direction</button>"
         let buttonListener = document.getElementById("weather-buttons").querySelectorAll("#graph-button");
         for(let a = 0; a < buttonListener.length; a ++) {
-            buttonListener[a].onclick = function (e) {
+            buttonListener[a].onclick = async function (e) {
                 e.preventDefault();
                 d3.selectAll("#d3-graph > *").remove();
                 formatGraphData(weatherRes['long'], a);
@@ -47,6 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         formatGraphData(weatherRes['long']);
     });
+
+    let removeData = () => {
+        let loadingFlag = document.getElementById("loader")
+        loadingFlag.innerHTML = "<h1 id='loader-header'>Requesting from NOAA... Stand-By!</h1>"
+        let table = document.getElementById("weather-info");
+        table.innerHTML = "";
+        let graph = document.getElementById("d3-graph")
+        graph.innerHTML = "";
+        let buttons = document.getElementById("weather-buttons");
+        buttons.innerHTML = "";
+        return true;
+    }
 
     let formatGraphData = (data, value = 4) => {
         let dewPoint = data.data.properties.dewpoint.values;
@@ -64,7 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
         update(graphDataPoints, value);
     }
 
-    function update(data, value) {
-        buildGraph(data[value], value);
+    async function update(data, value) {
+        buildGraph(data[value], value)
+        // removeLoader();
+    }
+
+    let removeLoader = () => {
+        let loadingFlag = document.getElementById("loader")
+        loadingFlag.innerHTML = "<h1 id='loader-header'></h1>"
     }
 });
