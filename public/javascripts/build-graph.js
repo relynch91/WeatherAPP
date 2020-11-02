@@ -2,6 +2,7 @@ const d3 = require('d3');
 const buildGraph = (data, value) => {
     let keyValue = ['Temperature (F)', 'Percentage (%)', 'Percentage (%)', 'Temperature (F) ',
         'WindSpeed (Knots)', 'True Wind Direction (Heading)']
+
     let dates = [];
     let values = [];
     let dataPackaged = data.map(function (d) {
@@ -55,10 +56,7 @@ const buildGraph = (data, value) => {
         .attr("x2", 0)
         .attr("y2", y(d3.max(values)))
         .selectAll("stop")
-        .data([
-            { offset: "0%", color: "blue" },
-            { offset: "100%", color: "red" }
-        ])
+        .data(configureColor(value))
         .enter().append("stop")
         .attr("offset", function (d) { return d.offset; })
         .attr("stop-color", function (d) { return d.color; });
@@ -78,5 +76,46 @@ const buildGraph = (data, value) => {
         .style("text-anchor", "middle")
         .text(keyValue[value]);
 };
+
+const configureColor = (value) => {
+    switch (value) {
+        case 0: //dewpoint
+            return [
+                { offset: "0%", color: "#FFF700" },
+                { offset: "30%", color: "#9AFF00" },
+                { offset: "60%", color: "#004DFF" }
+            ]
+        case 1: // humidity
+            return [
+                { offset: "0%", color: "#D5FF00" },
+                { offset: "50%", color: "#00FFBC" },
+                { offset: "80%", color: "#0022FF" }
+            ]
+        case 2: //skycover #0044FF
+            return [
+                { offset: "0%", color: "#bdecf3" },
+                { offset: "50%", color: "#29cce5" },
+                { offset: "80%", color: "#006988" }
+            ]
+        case 3: //temperature #00EFFF
+            return [
+                { offset: "0%", color: "#0000FF" },
+                { offset: "50%", color: "orange" },
+                { offset: "80%", color: "red" }
+            ]
+        case 4: //windspeed
+            return [
+                { offset: "0%", color: "#0044FF" },
+                { offset: "50%", color: "#00FFF7" },
+                { offset: "80%", color: "#B22222" }
+            ]
+        case 5: //wind direction
+            return [
+                { offset: "0%", color: "#0044FF" },
+                { offset: "50%", color: "#98FB98" },
+                { offset: "80%", color: "crimson" }
+            ]
+    }
+}
 
 export default buildGraph
