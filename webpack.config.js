@@ -9,7 +9,7 @@ const config = {
   plugins: [
     new webpack.ProgressPlugin()
   ],
-  watch: true,
+  // watch: true,
   devtool: 'source-map',
 }
 module.exports = config
