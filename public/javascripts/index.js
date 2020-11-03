@@ -1,4 +1,5 @@
 import { formatAddress, getWeather } from './google-api.js';
+import { removeLoader, removeData } from './loader.js';
 const d3 = require('d3');
 import buildData from "./build-data";
 import buildGraph from "./build-graph";
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let addressSearch = "";
     search.addEventListener("submit", async function(e){
         e.preventDefault();
-        await removeData();
+        removeData();
         let address = search.querySelector('input[type="text"]').value;
         addressSearch = address;
         let addressFormatted = formatAddress(address);
@@ -26,17 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }}
         formatGraphData(weatherRes['long']);
     });
-    let removeData = () => {
-        let loadingFlag = document.getElementById("loader")
-        loadingFlag.innerHTML = "<h1 id='loader-header'>Requesting from NOAA... Stand-By!</h1>"
-        let table = document.getElementById("weather-info");
-        table.innerHTML = "";
-        let graph = document.getElementById("d3-graph")
-        graph.innerHTML = "";
-        let buttons = document.getElementById("weather-buttons");
-        buttons.innerHTML = "";
-        return true;
-    }
     let formatGraphData = (data, value = 4) => {
         let dewPoint = data.data.properties.dewpoint.values;
         let relativeHumidity = data.data.properties.relativeHumidity.values;
@@ -54,10 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     async function update(data, value) {
         buildGraph(data[value], value)
-        removeLoader();
-    }
-    let removeLoader = () => {
-        let loadingFlag = document.getElementById("loader")
-        loadingFlag.innerHTML = `<h1 id='loader-header'>Weather Forecast: ${addressSearch}</h1>`
+        removeLoader(addressSearch);
     }
 });
