@@ -1,9 +1,9 @@
 import { formatAddress, getWeather } from './google-api.js';
 import { removeLoader, removeData } from './loader.js';
-const d3 = require('d3');
 import buildData from "./build-data";
 import buildGraph from "./build-graph";
 import buildHtml from "./build-html";
+const d3 = require('d3');
 
 document.addEventListener('DOMContentLoaded', () => {
     const graphDataPoints = [];
