@@ -1,5 +1,6 @@
 const axios = require('axios');
-import googleKey from '../../configKeys/config-keys.js';
+const googleKey = process.env.GOOGLE_GEO_CODING;
+// import googleKey from '../../configKeys/config-keys.js';
 
 export function formatAddress(address) {
     let words = address.split(",").map(x => {
