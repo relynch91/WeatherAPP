@@ -12,7 +12,7 @@ export function formatAddress(address) {
 
 export async function getWeather(formatted) {
     let googleKey = process.env.GOOGLE_GEO_CODING;
-    let latLong = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${formatted}&key=${googleKey}`);
+    let latLong = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${formatted}&key=AIzaSyDspsYjXNcK4ISYOm6BXBg9xqeggV1Td5I`);
     let lat = latLong.data.results[0].geometry.location['lat'];
     let long = latLong.data.results[0].geometry.location['lng'];
     let govMetaData = await axios.get(`https://api.weather.gov/points/${lat},${long}`);
