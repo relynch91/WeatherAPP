@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "node app.js",
+    "build": "webpack",
     "hbuild": "webpack && npm run start"
   },
   "dependencies": {

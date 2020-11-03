@@ -1,7 +1,7 @@
 const d3 = require('d3');
 const buildGraph = (data, value) => {
-    let keyValue = ['Temperature (F)', 'Percentage (%)', 'Percentage (%)', 'Temperature (F) ',
-        'WindSpeed (Knots)', 'True Wind Direction (Heading)']
+    let keyValue = ['Temperature (F°)', 'Percentage (%)', 'Percentage (%)', 'Temperature (C°) ',
+        'WindSpeed (Knots)', 'True Wind Direction (Degrees°)']
 
     let dates = [];
     let values = [];

@@ -11,6 +11,7 @@ export const removeData = () => {
 }
 
 export const removeLoader = (addressSearch) => {
+    let address = addressSearch.toUpperCase();
     let loadingFlag = document.getElementById("loader")
-    loadingFlag.innerHTML = `<h1 id='loader-header'>Weather Forecast: ${addressSearch}</h1>`
+    loadingFlag.innerHTML = `<h1 id='loader-header'>Weather Forecast: ${address}</h1>`
 }
