@@ -1,5 +1,5 @@
 const axios = require('axios');
-const googleKey = process.env.GOOGLE_GEO_CODING;
+// const googleKey = process.env.GOOGLE_GEO_CODING;
 // import googleKey from '../../configKeys/config-keys.js';
 
 export function formatAddress(address) {
@@ -11,6 +11,7 @@ export function formatAddress(address) {
 }
 
 export async function getWeather(formatted) {
+    let googleKey = process.env.GOOGLE_GEO_CODING;
     let latLong = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${formatted}&key=${googleKey}`);
     let lat = latLong.data.results[0].geometry.location['lat'];
     let long = latLong.data.results[0].geometry.location['lng'];
