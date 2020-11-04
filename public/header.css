@@ -33,16 +33,3 @@
 .header-title {
     margin: 5px 10px 05px 10px;
 }
-
-.footer {
-    height: 05vh;
-    min-height: 50px;
-    border: 1px solid black;
-    border-radius: 3px;
-    color: aqua;
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
